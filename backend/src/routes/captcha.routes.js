@@ -2,13 +2,14 @@
 const express = require('express');
 const router = express.Router();
 const captchaController = require('../controllers/captcha.controller');
+const { captchaLimiter } = require('../middleware/rateLimit.middleware'); // Import the limiter
 
 /**
  * @route GET /api/captcha
- * @desc Generate new captcha
+ * @desc Generate new captcha with rate limiting
  * @access Public
  */
-router.get('/captcha', async (req, res) => {
+router.get('/captcha', captchaLimiter, async (req, res) => {
     await captchaController.generateCaptcha(req, res);
 });
 
